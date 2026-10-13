@@ -955,6 +955,7 @@ impl MacWindow {
             bounds,
             titlebar,
             kind,
+            persistent_on_deactivate,
             is_movable,
             app_owns_titlebar_drag,
             is_resizable,
@@ -1235,6 +1236,9 @@ impl MacWindow {
                             | NSTrackingAreaOptions::InVisibleRect,
                     );
 
+                    if persistent_on_deactivate {
+                        let _: () = msg_send![native_window, setHidesOnDeactivate: NO];
+                    }
                     native_window.setLevel_(NSPopUpWindowLevel);
                     let _: () = msg_send![
                         native_window,

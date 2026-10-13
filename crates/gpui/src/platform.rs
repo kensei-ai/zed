@@ -2062,6 +2062,10 @@ pub struct WindowOptions {
     /// The kind of window to create
     pub kind: WindowKind,
 
+    /// Keeps a macOS popup visible while its application is inactive.
+    /// Only popup windows support this; ordinary windows retain platform defaults.
+    pub persistent_on_deactivate: bool,
+
     /// Whether the window can be moved by the user. When `false`, the user cannot drag
     /// the window (on macOS this sets `NSWindow.isMovable`, which also disables the
     /// Window-menu tiling items); programmatic moves are still allowed.
@@ -2126,6 +2130,9 @@ pub struct WindowOptions {
 )]
 #[allow(missing_docs)]
 pub struct WindowParams {
+    #[cfg(target_os = "macos")]
+    pub persistent_on_deactivate: bool,
+
     pub bounds: Bounds<Pixels>,
 
     /// The titlebar configuration of the window
@@ -2227,6 +2234,7 @@ impl Default for WindowOptions {
             focus: true,
             show: true,
             kind: WindowKind::Normal,
+            persistent_on_deactivate: false,
             is_movable: true,
             app_owns_titlebar_drag: false,
             inactive_frame_interval: Some(Duration::from_micros(33_333)),

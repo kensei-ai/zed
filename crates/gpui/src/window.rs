@@ -1509,6 +1509,7 @@ impl Window {
             focus,
             show,
             kind,
+            persistent_on_deactivate,
             is_movable,
             app_owns_titlebar_drag,
             inactive_frame_interval,
@@ -1528,6 +1529,11 @@ impl Window {
             tabbing_identifier,
         } = options;
 
+        anyhow::ensure!(
+            !persistent_on_deactivate || kind == WindowKind::PopUp,
+            "persistent_on_deactivate requires a popup window"
+        );
+
         let initial_window_title = titlebar
             .as_ref()
             .and_then(|titlebar| titlebar.title.clone());
@@ -1539,6 +1545,8 @@ impl Window {
                 bounds: window_bounds.get_bounds(),
                 titlebar,
                 kind,
+                #[cfg(target_os = "macos")]
+                persistent_on_deactivate,
                 is_movable,
                 app_owns_titlebar_drag,
                 is_resizable,
