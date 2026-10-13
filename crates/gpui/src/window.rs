@@ -1530,7 +1530,7 @@ impl Window {
         } = options;
 
         anyhow::ensure!(
-            !persistent_on_deactivate || kind == WindowKind::PopUp,
+            !persistent_on_deactivate || kind == crate::WindowKind::PopUp,
             "persistent_on_deactivate requires a popup window"
         );
 
